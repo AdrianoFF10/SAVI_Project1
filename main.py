@@ -41,7 +41,6 @@ def main():
                 image_encoding = face_recognition.face_encodings(image)[0]
                 known_face_encodings.append(image_encoding)
                 known_face_names.append(file.rsplit('.', 1)[0].capitalize())
-                Data_Photos.append(image)
 
 
     # Initialize some variables
@@ -124,6 +123,8 @@ def main():
                     image_encoding = face_recognition.face_encodings(image)[0]
                     known_face_encodings.append(image_encoding)
                     known_face_names.append(name)
+                    Data_Photos.append(image)
+
 
                     face_names.append(name)
                 
@@ -206,29 +207,40 @@ def main():
         #     track.draw(image_gui)
 
         # Show Database if was someone added
-        if Data_Len != len(Data_Photos):
-            
-            cv2.namedWindow('Database', cv2.WINDOW_NORMAL)
-            fig = plt.figure(figsize=(10, 7))
-            rows = len(Data_Photos)
-            columns = 1
+        if len(Data_Photos) != 0:
+            #print('Há foto')
+            if Data_Len < len(Data_Photos):
+                #print('+1')
+                #cv2.namedWindow('Database', cv2.WINDOW_NORMAL)
+                fig = plt.figure('DataBase', figsize=(10, 7), clear = True)
+                rows = len(Data_Photos)
+                columns = 1
 
 
-            # for n in range(int(len(Data_Photos))):
-            #     fig.add_subplot('Database',rows, columns, n + 1)
-            #     plt.imshow(Data_Photos[n])
-            #     plt.axis('off')
-            #     plt.title(known_face_names[n])
-            #     plt.tight_layout()   # Positions photos more aesthetics
-            # plt.show()
+                # for n in range(int(len(Data_Photos))):
+                #      fig.add_subplot('Database',rows, columns, n + 1)
+                #      plt.imshow(Data_Photos[n])
+                #      plt.axis('off')
+                #      plt.title(known_face_names[n])
+                #      plt.tight_layout()   # Positions photos more aesthetics
+                # plt.draw()
+                # key = plt.waitforbuttonpress(0.01)
 
-            for n, photo in enumerate(Data_Photos):
-                fig.add_subplot(rows, columns, n + 1)
-                plt.imshow(photo)
-                plt.axis('off')
-                plt.title(known_face_names[n])
-                plt.tight_layout()   # Positions photos more aesthetics
-            plt.show()
+                for idx_photo, photo in enumerate(Data_Photos):
+                    fig = plt.figure('DataBase', figsize=(10, 7), clear = False)
+                    fig.add_subplot(rows, columns, idx_photo + 1)
+                    plt.imshow(photo)
+                    plt.axis('off')
+                    plt.title(known_face_names[idx_photo])
+                    plt.tight_layout()   # Positions photos more aesthetics
+                plt.draw()
+                key = plt.waitforbuttonpress(0.01)
+
+
+            # if not plt.fignum_exists(1):
+            #    print('Terminating')
+            #    break
+
 
 
         if video_frame_number == 0:
@@ -241,14 +253,14 @@ def main():
 
         # Display the resulting image
         cv2.imshow('GUI',image_gui)
-        
+        Data_Len = len(Data_Photos)
+
         
         # Hit 'q' on the keyboard to quit
         if cv2.waitKey(1) & 0xFF == ord('q') :
             break
 
         video_frame_number += 1
-        Data_Len = len(Data_Photos)
 
     
 if __name__ == "__main__":

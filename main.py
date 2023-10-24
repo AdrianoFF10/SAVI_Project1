@@ -210,7 +210,7 @@ def main():
         if len(Data_Photos) != 0:
             #print('Há foto')
             if Data_Len < len(Data_Photos):
-                #print('+1')
+                print('+1')
                 #cv2.namedWindow('Database', cv2.WINDOW_NORMAL)
                 fig = plt.figure('DataBase', figsize=(10, 7), clear = True)
                 rows = len(Data_Photos)

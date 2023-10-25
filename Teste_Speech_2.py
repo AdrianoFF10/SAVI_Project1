@@ -1,29 +1,25 @@
-#instalar bib
-# pip install gTTs
+import pyttsx3
 
-# Import the required module for text  
-# to speech conversion 
-from gtts import gTTS 
-  
-# This module is imported so that we can  
-# play the converted audio 
-import os 
-  
-# The text that you want to convert to audio 
-mytext = 'Welcome to geeksforgeeks!'
-  
-# Language in which you want to convert 
-language = 'pt'
-  
-# Passing the text and language to the engine,  
-# here we have marked slow=False. Which tells  
-# the module that the converted audio should  
-# have a high speed 
-myobj = gTTS(text=mytext, lang=language, slow=False) 
-  
-# Saving the converted audio in a mp3 file named 
-# welcome  
-myobj.save("welcome.mp3") 
-  
-# Playing the converted file 
-os.system("mpg321 welcome.mp3") 
+# Initialize the speech engine
+engine = pyttsx3.init()
+
+# List available voices
+voices = engine.getProperty('voices')
+for voice in voices:
+    print("Voice:")
+    print(" - ID:", voice.id)
+    print(" - Name:", voice.name)
+    print(" - Languages:", voice.languages)
+
+# Select a voice (replace 'voice_id' with the ID of the desired voice)
+voice_id = 'your_desired_portugal'
+engine.setProperty('voice', 'portugal')
+engine.setProperty('rate',155)
+
+
+
+# Test the voice
+engine.say("Olá Bernardo")
+
+# Wait for the speech to finish
+engine.runAndWait()

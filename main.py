@@ -1,14 +1,12 @@
 # Sistemas Avançados de Visão Industrial (SAVI 23-24)
 # Grupo 1 - Adriano Figueredo e Bernardo Peixoto, DEM, UA
 
-
-
 import copy
 # import csv
 # import math
 # import time
 from random import randint
-import face_recognition
+import face_recognition 
 import cv2
 from matplotlib import pyplot as plt
 import numpy as np

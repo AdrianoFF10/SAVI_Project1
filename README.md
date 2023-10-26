@@ -9,13 +9,19 @@
   * [Utilização](#Utilização)
   * [Autores](#Autores)
 
+<p align="center">
+![Image](./imagens/ua_logo.png)
+</p>
 
 ## Introdução
 
 Este projeto é um sistema inteligente que utiliza uma câmara a bordo do computador para detetar e reconhecer rostos em tempo real. Oferece o reconhecimento facial de pessoas do grupo, com cumprimentos e o seguimento das deteções.
-Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de Visão Industrial
+Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de Visão Industrial.
 
-![Image](./imagens/ua_logo.png)
+<p align="center">
+![Image](./imagens/run_main.png)
+</p>
+
 
 ## Funcionalidades 
 
@@ -41,12 +47,12 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
 
 - Clone o repositório:
 ```
-`git clone https://github.com/AdrianoFF10/SAVI_Project1`
+git clone https://github.com/AdrianoFF10/SAVI_Project1
 ```
 
 - Execute o programa: 
 ```
-`python3 main.py`
+python3 main.py
 ```
 Certifique-se de criar uma base de dados de imagens de pessoas conhecidas na pasta "Database" antes de executar o sistema.
 
@@ -54,8 +60,5 @@ Certifique-se de criar uma base de dados de imagens de pessoas conhecidas na pas
 ## Autores
 
 - [@AdrianoFF10](https://github.com/AdrianoFF10) - adrianofigueiredo7@ua.pt  104192
-- [@bpeixoto02](https://github.com/bpeixoto02) - 
-bernardo.peixoto@ua.pt 103050
-
-
+- [@bpeixoto02](https://github.com/bpeixoto02) - bernardo.peixoto@ua.pt 103050
 

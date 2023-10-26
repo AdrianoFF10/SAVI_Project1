@@ -1,3 +1,7 @@
+# Sistemas Avançados de Visão Industrial (SAVI 23-24)
+# Grupo 1 - Adriano Figueredo e Bernardo Peixoto, DEM, UA
+
+
 import copy
 import face_recognition
 import cv2

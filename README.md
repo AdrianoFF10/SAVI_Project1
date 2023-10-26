@@ -9,18 +9,19 @@
   * [Utilização](#Utilização)
   * [Autores](#Autores)
 
-<p align="center">
-![Image](./imagens/ua_logo.png)
-</p>
+<div align="center">
+  <img src="./imagens/ua_logo.png" >
+</div>
 
 ## Introdução
 
 Este projeto é um sistema inteligente que utiliza uma câmara a bordo do computador para detetar e reconhecer rostos em tempo real. Oferece o reconhecimento facial de pessoas do grupo, com cumprimentos e o seguimento das deteções.
 Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de Visão Industrial.
 
-<p align="center">
-![Image](./imagens/run_main.png)
-</p>
+<div align="center">
+  <img src="./imagens/run_main.png" alt="Programa em funcionamento">
+</div>
+
 
 
 ## Funcionalidades 

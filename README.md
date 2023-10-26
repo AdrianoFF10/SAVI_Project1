@@ -1,4 +1,4 @@
-# Sistema Inteligente de Reconhecimento de Pessoas
+# Sistema Inteligente de Reconhecimento de Facial
 
 
 # Index
@@ -12,7 +12,8 @@
 
 ## Introdução
 
-Este projeto é um sistema inteligente que utiliza uma câmara a bordo do computador para detetar e reconhecer rostos humanos em tempo real. Oferece o reconhecimento de pessoas do grupo, com cumprimentos e o seguimento dad deteções
+Este projeto é um sistema inteligente que utiliza uma câmara a bordo do computador para detetar e reconhecer rostos em tempo real. Oferece o reconhecimento facial de pessoas do grupo, com cumprimentos e o seguimento das deteções.
+Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de Visão Industrial
 
 ![Image](ua_logo.png)
 
@@ -34,7 +35,7 @@ Este projeto é um sistema inteligente que utiliza uma câmara a bordo do comput
 ## Requisitos
 
 - Python 3.6 ou superior
-- Bibliotecas listadas em `requirements.txt`
+- Bibliotecas listadas em: `requirements.txt`
 
 ## Utilização
 

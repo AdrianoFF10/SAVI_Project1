@@ -2,13 +2,12 @@
 
 
 # Index
-=================
 
   * [Introdução](#Introdução)
   * [Funcionalidades ](#Funcionalidades)
   * [Requisitos](#Requisitos)
   * [Utilização](#Utilização)
-  * [Authors](#authors)
+  * [Autores](#Autores)
 
 
 ## Introdução
@@ -39,16 +38,22 @@ Este projeto é um sistema inteligente que utiliza uma câmara a bordo do comput
 
 ## Utilização
 
-- Clone o repositório: `git clone https://github.com/AdrianoFF10/SAVI_Project1`
-- Execute o programa: `python3 main.py`
+- Clone o repositório:
+```
+`git clone https://github.com/AdrianoFF10/SAVI_Project1`
+```
 
+- Execute o programa: 
+```
+`python3 main.py`
+```
 Certifique-se de criar uma base de dados de imagens de pessoas conhecidas na pasta "Database" antes de executar o sistema.
 
 
 ## Autores
 
 - [@AdrianoFF10](https://github.com/AdrianoFF10) - adrianofigueiredo7@ua.pt  104192
-- [@bpeixoto02](httadrianofigueiredo7@ua.pt ps://github.com/bpeixoto02) - 
+- [@bpeixoto02](https://github.com/bpeixoto02) - 
 bernardo.peixoto@ua.pt 103050
 
 

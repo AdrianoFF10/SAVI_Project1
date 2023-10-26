@@ -15,7 +15,7 @@
 Este projeto é um sistema inteligente que utiliza uma câmara a bordo do computador para detetar e reconhecer rostos em tempo real. Oferece o reconhecimento facial de pessoas do grupo, com cumprimentos e o seguimento das deteções.
 Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de Visão Industrial
 
-![Image](ua_logo.png)
+![Image](./imagens/ua_logo.png)
 
 ## Funcionalidades 
 

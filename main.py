@@ -143,8 +143,13 @@ def main():
                     # ----------
 
                     #Calling a function to get the user name, photo, and close interface
-                    user_input = Create_Interface(small_video[face_locations[idx][0]-30:face_locations[idx][2]+30, face_locations[idx][3]-30:face_locations[idx][1]+30])
+                    #cv2.imwrite("Temporary_Database/" + '1'.lower() + ".jpg", small_video[face_locations[idx][0]-30:face_locations[idx][2]+30, face_locations[idx][3]-30:face_locations[idx][1]+30])
+                    
 
+                    user_input = Create_Interface()   # problema em continuação
+
+
+                    #os.remove("Temporary_Database/" + '1' + ".jpg")
                     # ----------
 
                     name = str(user_input)
@@ -153,6 +158,7 @@ def main():
                     Greetings.append(name)
                     cv2.imwrite("Database/" + name.lower() + ".jpg", small_video[face_locations[idx][0]-30:face_locations[idx][2]+30, face_locations[idx][3]-30:face_locations[idx][1]+30])
                     
+
                     try:
                         image = face_recognition.load_image_file("Database/" + name.lower() + ".jpg")
                         image_encoding = face_recognition.face_encodings(image)[0]
@@ -263,10 +269,10 @@ def main():
                 # plt.draw()
                 # key = plt.waitforbuttonpress(0.01)
 
-                for idx_photo, photo in enumerate(Data_Photos):
+                for idx_photo, face_photo in enumerate(Data_Photos):
                     fig = plt.figure('DataBase', figsize=(10, 7), clear = False)
                     fig.add_subplot(rows, columns, idx_photo + 1)
-                    plt.imshow(photo)
+                    plt.imshow(face_photo)
                     plt.axis('off')
                     plt.title(saved_known_faces[idx_photo])
                     plt.tight_layout()   # Positions photos more aesthetics
@@ -291,14 +297,12 @@ def main():
         # Display the resulting image
         cv2.imshow('Face Cam Detector',image_gui)
         Data_Len = len(Data_Photos)
-
         
         # Hit 'q' on the keyboard to quit
         if cv2.waitKey(1) & 0xFF == ord('q') :
             break
 
         video_frame_number += 1
-
     
 if __name__ == "__main__":
     main()

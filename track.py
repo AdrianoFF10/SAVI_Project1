@@ -57,7 +57,7 @@ def computeIOU(d1, d2):
     else:
         return 0.0
     
-def Create_Interface(image):
+def Create_Interface():
     def save_input():       
         global user_input
         user_input = entry.get()
@@ -66,10 +66,13 @@ def Create_Interface(image):
     root = tk.Tk()
     root.title("Person name")
 
-    # Carregar a imagem com o Pillow e convertê-la para um formato adequado
-    image = ImageTk.PhotoImage(image)
-    image_label = tk.Label(root, image=image)
-    image_label.pack()
+    # # Carregar a imagem com o Pillow e convertê-la para um formato adequado
+    # image = Image.open(path)
+    # image = ImageTk.PhotoImage(image)
+    # # cv2.imshow(image)
+    # cv2.waitKey(0)
+    # image_label = tk.Label(root, image=image)
+    # image_label.pack()
     
     label = tk.Label(root, text="Insert your name:")
     label.pack()

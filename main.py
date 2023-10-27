@@ -71,6 +71,9 @@ def main():
         
         # Grab a single frame of video
         ret, video = cap.read() # Capture frame-by-frame
+
+        video = cv2.flip(video, 1)
+        
         if ret is False:
             break
 
@@ -121,6 +124,8 @@ def main():
                     engine.say('Hello! Who are you?')
                     engine.runAndWait()
 
+                    # ---------------------
+
                     # Defining a function to get the input by user and close the interface
 
                     # def save_input():       
@@ -146,13 +151,16 @@ def main():
                     #cv2.imwrite("Temporary_Database/" + '1'.lower() + ".jpg", small_video[face_locations[idx][0]-30:face_locations[idx][2]+30, face_locations[idx][3]-30:face_locations[idx][1]+30])
                     
 
-                    user_input = Create_Interface()   # problema em continuação
+                    #user_input = Create_Interface()   # problema em continuação
 
 
                     #os.remove("Temporary_Database/" + '1' + ".jpg")
+                    #name = str(user_input)
                     # ----------
 
-                    name = str(user_input)
+                    
+
+                    name = input('Who are you')
                     engine.say("Hello " + name)
                     engine.runAndWait()
                     Greetings.append(name)

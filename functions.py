@@ -106,7 +106,12 @@ class Detection(BoundingBox):
             face_rgb = image_full[self.x1 // 2 - 10 : (self.x1 // 2 + self.h // 2) + 10, self.y1 // 2 - 10 : (self.y1 // 2 + self.w // 2) +10 ]
             #face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
             face_bgr = np.ascontiguousarray(face_rgb[:, :, ::-1])
-            cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
+            if not face_bgr.empty():
+                cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
+            else:
+                print("The face image is empty. Skipping image write.")
+
+            #cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
             Data_Photos.append(face_rgb)
 
 

@@ -81,25 +81,31 @@ class Detection(BoundingBox):
 
         # If the face is unknown ask for a name in the terminal and match the name with the face 
         # encoding of the know face face encodings
+
             else:
+                person = 'Unknown'
                 person = input('Who are you?')
                 self.person = str(person)
                 saved_names.append(person)
                 saved_encodings.append(face_encoding)
-                face_rgb = image_full[self.x1 // 2 - 10 : (self.x1 // 2 + self.h // 2) + 10, self.y1 // 2 - 25 : (self.y1 // 2 + self.w // 2) + 5 ]
-                face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
+                face_rgb = image_full[self.x1 // 2 : (self.x1 // 2 + self.h // 2) + 20, self.y1 // 2 - 40 : (self.y1 // 2 + self.w // 2) -20 ]
+                #face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
+                face_bgr = np.ascontiguousarray(face_rgb[:, :, ::-1])
+
                 cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
                 Data_Photos.append(face_rgb)
 
 
         # Write the new person into the database
         else:
+            person = 'Unknown'
             person = input('Who are you?')
             self.person = str(person)
             saved_names.append(person)
             saved_encodings.append(face_encoding)
             face_rgb = image_full[self.x1 // 2 - 10 : (self.x1 // 2 + self.h // 2) + 10, self.y1 // 2 - 10 : (self.y1 // 2 + self.w // 2) +10 ]
-            face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
+            #face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
+            face_bgr = np.ascontiguousarray(face_rgb[:, :, ::-1])
             cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
             Data_Photos.append(face_rgb)
 
@@ -109,6 +115,9 @@ class Detection(BoundingBox):
         
         cv.putText(image_gui, 'd' , (self.x1, self.y1-5), cv.FONT_HERSHEY_SIMPLEX, 
                         1, color, 2, cv.LINE_AA)
+        
+    def getLowerMiddlePoint(self):
+        return (self.x1 + int((self.x1 - self.x1 + self.w)/2) , int(self.y1 + self.h))
 
 
 # Classifies the trackers using the detections using a CSRT tracker embedder in opencv
@@ -131,12 +140,9 @@ class Tracker():
         engine.runAndWait()
         engine.stop()
 
-
-
     # Gets the time of the last detection
     def getLastDetectionStamp(self):
         return self.detections[-1].stamp
-
 
     def updateTime(self, stamp):
         self.time_since_last_detection = round(stamp-self.getLastDetectionStamp(),1)
@@ -147,8 +153,12 @@ class Tracker():
     # Draws on the video a bbox, the person's name and the time since the last detection
     def draw(self, image_gui, color=(255,0,255)):
 
-
         bbox = self.bboxes[-1] # get last bounding box
+
+        for detection_a, detection_b in zip(self.detections[0:-1], self.detections[1:]):
+            start_point = detection_a.getLowerMiddlePoint()
+            end_point = detection_b.getLowerMiddlePoint()
+            cv.line(image_gui, start_point, end_point, color, 1) 
 
         cv.rectangle(image_gui,(bbox.x1,bbox.y1),(bbox.x2, bbox.y2),color,3)
 
@@ -163,7 +173,7 @@ class Tracker():
     # Adds a new detection to the detection list
     def addDetection(self, detection, image):
 
-        self.tracker.init(image, (detection.x1, detection.y1, detection.w, detection.h))
+        self.tracker.init(image, (detection.x1//2, detection.y1//2, detection.w//2, detection.h//2))  # alteração aqui
 
         self.detections.append(detection)
         detection.assigned_to_tracker = True

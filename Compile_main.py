@@ -70,13 +70,10 @@ while True:
     # Convert form bgr to rgb for the face recognition library
     image_rgb_small = cv.cvtColor(small_frame, cv.COLOR_BGR2RGB)
     
-
-
     # face_recognition tool usage to find a face 
     face_locations = face_recognition.face_locations(image_rgb_small)
     face_encodings = face_recognition.face_encodings(image_rgb_small, face_locations)
    
-
     # Creates a Detection class and connects it with a face
     
     detections = []
@@ -92,7 +89,6 @@ while True:
         detection.draw(image_gui)
         detections.append(detection)
 
- 
     # Detection to tracker evaluation and association
     for detection in detections: 
         for tracker in trackers: 
@@ -140,7 +136,6 @@ while True:
             rows = len(Data_Photos)
             columns = 1
 
-
             # for n in range(int(len(Data_Photos))):
             #      fig.add_subplot('Database',rows, columns, n + 1)
             #      plt.imshow(Data_Photos[n])
@@ -160,17 +155,14 @@ while True:
             plt.draw()
             key = plt.waitforbuttonpress(0.01)
 
-
     # Show image in window    
     cv.imshow('Face Cam Detector',image_gui) # show the image
     Data_Len = len(Data_Photos)
-
 
     if cv.waitKey(50) == ord('q'):
         break
 
     frame_counter += 1
-
 
 # ------------------------------------------
 # Termination

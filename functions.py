@@ -66,7 +66,7 @@ class Detection(BoundingBox):
         #cv.imshow(self.image)
         self.assigned_to_tracker = False
 
-#        name = 'Unknown'
+        self.person = 'Unknown'
 
         if len(saved_encodings) != 0:
         # See if the face is a match for the known faces using the face_recognition library

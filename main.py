@@ -4,19 +4,17 @@
 
 
 import copy
-# import csv
-# import math
-# import time
 from random import randint
 import face_recognition
 import cv2
 from matplotlib import pyplot as plt
 import numpy as np
-from track import Detection, Track, computeIOU
-# from colorama import Fore, Back, Style
+from track import Detection, Track, computeIOU, Create_Interface
 import os
 import pyttsx3
-
+from tkinter import *
+import tkinter as tk
+import threading
 
 def main():
 
@@ -25,31 +23,37 @@ def main():
     # --------------------------------------
     cap = cv2.VideoCapture(0)
 
-    # Create arrays of known face encodings and their names
-    known_face_encodings = []
-    known_face_names = []
+    # Create arrays with face encodings, names, and database information
+
     Data_Photos = []
     Data_Len = 0
+    saved_face_encodings = []
+    saved_known_faces = []
 
 
-    # Read database of saved images
+    # Read database of saved images and creating names and encodings list
+
+    #known_face_encodings, known_face_names = Read_database('Database')
+
     if len(os.listdir("Database")) != 0:
+        # known_face_encodings, known_face_names, image = Read_database('Database')
+        # Data_Photos.append(image)
+
         for file in os.listdir("Database"):
 
             if file.endswith(".jpg"):
                 image = face_recognition.load_image_file("Database/" + file)
                 image_encoding = face_recognition.face_encodings(image)[0]
-                known_face_encodings.append(image_encoding)
-                known_face_names.append(file.rsplit('.', 1)[0].capitalize())
+                saved_face_encodings.append(image_encoding)
+                saved_known_faces.append(file.rsplit('.', 1)[0].capitalize())
+                Data_Photos.append(image)
 
 
     # Initialize some variables
-    face_locations = []
-    face_encodings = []
-    face_names = []
+
     process_this_frame = True
 # --------------------------------------
-    hellos = []
+    Greetings = []
     engine = pyttsx3.init()
 
     # Parameters
@@ -64,32 +68,35 @@ def main():
     # --------------------------------------
     # Execution
     # --------------------------------------
+
     while(cap.isOpened()): # iterate video frames
         
         # Grab a single frame of video
-        result, image_rgb = cap.read() # Capture frame-by-frame
-        if result is False:
+        ret, video = cap.read() # Capture frame-by-frame
+        if ret is False:
             break
 
         frame_stamp = round(float(cap.get(cv2.CAP_PROP_POS_MSEC))/1000,2)
-        height, width, _ = image_rgb.shape
-        image_gui = copy.deepcopy(image_rgb) # good practice to have a gui image for drawing
+        height, width, _ = video.shape
+        image_gui = copy.deepcopy(video) # good practice to have a gui image for drawing
     
         # ------------------------------------------------------
         # Detect people using Face Recognition
         # ------------------------------------------------------
+
         # Only process every other frame of video to save time
         if process_this_frame:
-            # Resize frame of video to 1/4 size for faster face recognition processing
-            small_frame = cv2.resize(image_rgb, (0, 0), fx=0.5, fy=0.5)
+            # Resize frame of video to 1/2 size for faster face recognition processing
+            small_video = cv2.resize(video, (0, 0), fx=0.5, fy=0.5)
 
             # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
             # rgb_small_frame = small_frame[:, :, ::-1]
-            rgb_small_frame = np.ascontiguousarray(small_frame[:, :, ::-1])
+            #rgb_small_frame = np.ascontiguousarray(small_video[:, :, ::-1])
+            rgb_small_video = cv2.cvtColor(small_video, cv2.COLOR_BGR2RGB)
 
             # Find all the faces and face encodings in the current frame of video
-            face_locations = face_recognition.face_locations(rgb_small_frame)
-            face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+            face_locations = face_recognition.face_locations(rgb_small_video)
+            face_encodings = face_recognition.face_encodings(rgb_small_video, face_locations)
             # print(face_locations)
             # print(face_encodings)
 
@@ -97,36 +104,68 @@ def main():
 
             for idx, face_encoding in enumerate(face_encodings):
                 # See if the face is a match for the known face(s)
-                if len(known_face_encodings) != 0:
-                    matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+
                 name = "Unknown"
 
-                # Or instead, use the known face with the smallest distance to the new face
-                if len(known_face_encodings) != 0:
-                    face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+                if len(saved_face_encodings) != 0:
+                    matches = face_recognition.compare_faces(saved_face_encodings, face_encoding)
+                    face_distances = face_recognition.face_distance(saved_face_encodings, face_encoding)
                     best_match_index = np.argmin(face_distances)
                     if matches[best_match_index]:
-                        name = known_face_names[best_match_index]
-                        if name not in hellos:
+                        name = saved_known_faces[best_match_index]
+                        if name not in Greetings:
                             engine.say("Hello " + name)
                             engine.runAndWait()
-                            hellos.append(name)
+                            Greetings.append(name)
                 face_names.append(name)
 
                 if name.lower() == "unknown":
-                    name = input("What is your name? ")
+                    engine.say('Hello! Who are you?')
+                    engine.runAndWait()
+
+                    # Defining a function to get the input by user and close the interface
+
+                    # def save_input():       
+                    #     global user_input
+                    #     user_input = entry.get()
+                    #     root.destroy()
+
+                    
+                    # root = tk.Tk()
+                    # root.geometry('350x100')
+                    # root.title("Person name")
+                    # label = tk.Label(root, text = "Insert your name:")
+                    # label.pack()
+                    # entry = tk.Entry(root)
+                    # entry.pack()
+                    # button = tk.Button(root, text="Save and Close", command=save_input)
+                    # button.pack()
+                    # root.mainloop()
+
+                    # ----------
+
+                    #Calling a function to get the user name, photo, and close interface
+                    user_input = Create_Interface(small_video[face_locations[idx][0]-30:face_locations[idx][2]+30, face_locations[idx][3]-30:face_locations[idx][1]+30])
+
+                    # ----------
+
+                    name = str(user_input)
                     engine.say("Hello " + name)
                     engine.runAndWait()
-                    hellos.append(name)
-                    cv2.imwrite("Database/" + name.lower() + ".jpg", small_frame[face_locations[idx][0]-30:face_locations[idx][2]+30, face_locations[idx][3]-30:face_locations[idx][1]+30])
-                    image = face_recognition.load_image_file("Database/" + name.lower() + ".jpg")
-                    image_encoding = face_recognition.face_encodings(image)[0]
-                    known_face_encodings.append(image_encoding)
-                    known_face_names.append(name)
-                    Data_Photos.append(image)
-
-
-                    face_names.append(name)
+                    Greetings.append(name)
+                    cv2.imwrite("Database/" + name.lower() + ".jpg", small_video[face_locations[idx][0]-30:face_locations[idx][2]+30, face_locations[idx][3]-30:face_locations[idx][1]+30])
+                    
+                    try:
+                        image = face_recognition.load_image_file("Database/" + name.lower() + ".jpg")
+                        image_encoding = face_recognition.face_encodings(image)[0]
+                        saved_face_encodings.append(image_encoding)
+                        saved_known_faces.append(name)
+                        Data_Photos.append(image)
+                        face_names.append(name)
+                    
+                    except IndexError:
+                        print('Error in face detection. Please check Database photos.')
+                        os.remove("Database/" + name.lower() + ".jpg")
                 
 
         process_this_frame = not process_this_frame
@@ -231,7 +270,7 @@ def main():
                     fig.add_subplot(rows, columns, idx_photo + 1)
                     plt.imshow(photo)
                     plt.axis('off')
-                    plt.title(known_face_names[idx_photo])
+                    plt.title(saved_known_faces[idx_photo])
                     plt.tight_layout()   # Positions photos more aesthetics
                 plt.draw()
                 key = plt.waitforbuttonpress(0.01)
@@ -244,15 +283,15 @@ def main():
 
 
         if video_frame_number == 0:
-            cv2.namedWindow('GUI',cv2.WINDOW_NORMAL)
-            cv2.resizeWindow('GUI', int(width), int(height))
+            cv2.namedWindow('Face Cam Detector',cv2.WINDOW_NORMAL)
+            cv2.resizeWindow('Face Cam Detector', int(width), int(height))
 
         # Add frame number and time to top left corner
         cv2.putText(image_gui, 'Frame ' + str(video_frame_number) + ' Time ' + str(frame_stamp) + ' secs',
                     (10,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2, cv2.LINE_AA)
 
         # Display the resulting image
-        cv2.imshow('GUI',image_gui)
+        cv2.imshow('Face Cam Detector',image_gui)
         Data_Len = len(Data_Photos)
 
         
@@ -265,3 +304,13 @@ def main():
     
 if __name__ == "__main__":
     main()
+
+    thread_1 = threading.Thread(target=main)
+    thread_2 = threading.Thread(target=Create_Interface)
+
+    thread_1.start()
+    thread_2.start()
+
+    thread_1.join()
+    thread_2.join()
+

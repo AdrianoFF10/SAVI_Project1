@@ -9,8 +9,7 @@ import os
 import face_recognition
 import cv2
 import numpy as np
-import tkinter as tk
-from PIL import Image, ImageTk
+import math
 
 # def Read_database(patch):
 #     names = []
@@ -25,6 +24,17 @@ from PIL import Image, ImageTk
 
 
 #     return encodings, names, image
+
+# def face_match_perc(face_distance):
+#     threshold=0.6
+#     range = (1.0 - threshold)
+#     linear_val = (1.0 - face_distance) / (range * 2.0)
+
+#     if face_distance > threshold:
+#         return linear_val * 100
+#     else:
+#         value = (linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)))
+#         return value * 100
 
 def computeIOU(d1, d2):
     # box1 and box2 should be in the format (x1, y1, x2, y2)
@@ -56,58 +66,23 @@ def computeIOU(d1, d2):
         return iou
     else:
         return 0.0
-    
-def Create_Interface(image):
-    def save_input():       
-        global user_input
-        user_input = entry.get()
-        root.destroy()
-
-    root = tk.Tk()
-    root.title("Person name")
-
-    # Carregar a imagem com o Pillow e convertê-la para um formato adequado
-    image = ImageTk.PhotoImage(image)
-    image_label = tk.Label(root, image=image)
-    image_label.pack()
-    label = tk.Label(root, text="Insert your name:")
-    label.pack()
-    entry = tk.Entry(root)
-    entry.pack()
-    button = tk.Button(root, text="Save and Close", command=save_input)
-    button.pack()
-    root.mainloop()
-    print("User input:", user_input)
-
-    return user_input
 
 
 class Detection():
-    def __init__(self, left, right, top, bottom, id, stamp, name):
+    def __init__(self, image, left, right, top, bottom, id, stamp, name = ''):
         self.left = left*2
         self.right = right*2
         self.top = top*2
         self.bottom = bottom*2
-        self.cx = int((left + right)/2)*2
-        self.cy = int((top + bottom)/2)*2
+        # self.cx = int((left + right)/2)*2
+        # self.cy = int((top + bottom)/2)*2
+        self.detection_image = image[self.top:self.bottom, self.left:self.right]
         self.detection_id = id
         self.stamp = stamp
         self.name = name
 
-      
-        root = tk.Tk()
-        root.geometry('350x100')
-        root.title("Person name")
-        label = tk.Label(root, text = "Insert your name:")
-        label.pack()
-        entry = tk.Entry(root)
-        entry.pack()
-        button = tk.Button(root, text="Save and Close", command=save_input)
-        button.pack()
-        root.mainloop()
-    
 
-    def draw(self, image, color, draw_position='bottom', text=None):
+    def draw(self, image, color):
         start_point = (self.left, self.top)
         end_point = (self.right, self.bottom)
         cv2.rectangle(image, start_point, end_point, color, 2)
@@ -115,20 +90,11 @@ class Detection():
         # if text is None:
         #     text = 'Det ' + self.detection_id
 
-        if text is None:
-            text = self.name
-
-        if draw_position == 'bottom':
-            position = (self.left, self.bottom + 30)
-        else:
-            position = (self.left, self.top-10)
-
+        text = 'N: ' + self.name
 
         #cv2.putText(image, text, position, cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2, cv2.LINE_AA)
-        cv2.rectangle(image, (self.left, self.bottom + 35), (self.right, self.bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(image, text, (self.left + 6, self.bottom + 29), font, 1.0, (255, 255, 255), 1)
-
+        #cv2.rectangle(image, (self.left, self.bottom + 35), (self.right, self.bottom), (0, 0, 255), cv2.FILLED)
+        cv2.putText(image, text, (self.left + 8, self.top - 35), cv2.FONT_HERSHEY_DUPLEX, 1.0, (255, 255, 255), 1)
 
 
         # # Draw center of box
@@ -137,28 +103,55 @@ class Detection():
     def getLowerMiddlePoint(self):
         return (self.left + int((self.right - self.left)/2) , self.bottom)
 
-
 class Track():
 
     # Class constructor
-    def __init__(self, id, detection,  color=(255, 0, 0)):
-        self.track_id = id
+    def __init__(self, name, detection, color=(255, 0, 0)):
+        self.track_name = name
         self.color = color
         self.detections = [detection]
         self.active = True
-
-        print('Starting constructor for track id ' + str(self.track_id))
+        
+        print('Starting constructor for track id ' + str(self.track_name))
 
     def draw(self, image):
 
         #Draw only last detection
-        self.detections[-1].draw(image, self.color, text=self.track_id, draw_position='top')
+        self.detections[-1].draw(image, self.color)
 
         for detection_a, detection_b in zip(self.detections[0:-1], self.detections[1:]):
             start_point = detection_a.getLowerMiddlePoint()
             end_point = detection_b.getLowerMiddlePoint()
-            cv2.line(image, start_point, end_point, self.color, 1) 
+            cv2.line(image, start_point, end_point, self.color, 1)
 
+    def track(self, image, video_frame_number, stamp):
+
+        template = self.detections[-1].detection_image
+        h,w,_ = template.shape
+
+        print('Track ' + self.track_name + ' running track ...')
+
+        result = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
+
+        _, _, _, max_loc = cv2.minMaxLoc(result)
+
+        # Convert to Detection convention left, right, top, bottom
+        x, y = max_loc
+        left = x
+        right = int(x + w)
+        top = int(y)
+        bottom = int(y + h)
+        # print('left = ' + str(left))
+        # print('right = ' + str(right))
+        # print('top = ' + str(top))
+        # print('bottom = ' + str(bottom))
+
+        detection_id = 'Tracking ' + str(video_frame_number)
+        detection = Detection(left, right, top, bottom, detection_id, stamp, self.track_name)
+        self.detections.append(detection) 
 
     def update(self, detection):
         self.detections.append(detection)
+
+
+        

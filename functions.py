@@ -63,6 +63,7 @@ class Detection(BoundingBox):
         self.id = id
         self.stamp = stamp
         self.image =self.extractSmallImage(image_full)
+        #cv.imshow(self.image)
         self.assigned_to_tracker = False
 
 #        name = 'Unknown'
@@ -88,9 +89,9 @@ class Detection(BoundingBox):
                 self.person = str(person)
                 saved_names.append(person)
                 saved_encodings.append(face_encoding)
-                face_rgb = image_full[self.x1 // 2 : (self.x1 // 2 + self.h // 2) + 20, self.y1 // 2 - 40 : (self.y1 // 2 + self.w // 2) -20 ]
-                #face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
-                face_bgr = np.ascontiguousarray(face_rgb[:, :, ::-1])
+                face_rgb = image_full[self.y1 // 2 : (self.y1//2 + self.w //2) , self.x1 //2 : (self.x1//2  + self.h//2)  ]
+                face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
+                #face_bgr = np.ascontiguousarray(face_rgb[:, :, ::-1])
 
                 cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
                 Data_Photos.append(face_rgb)
@@ -103,15 +104,14 @@ class Detection(BoundingBox):
             self.person = str(person)
             saved_names.append(person)
             saved_encodings.append(face_encoding)
-            face_rgb = image_full[self.x1 // 2 - 10 : (self.x1 // 2 + self.h // 2) + 10, self.y1 // 2 - 10 : (self.y1 // 2 + self.w // 2) +10 ]
-            #face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
-            face_bgr = np.ascontiguousarray(face_rgb[:, :, ::-1])
-            if not face_bgr.empty():
-                cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
-            else:
-                print("The face image is empty. Skipping image write.")
-
-            #cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
+            face_rgb = image_full[self.y1 // 2 : (self.y1 // 2 + self.w // 2) , self.x1 // 2  : (self.x1 // 2 + self.h// 2)  ]
+            face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
+            #face_bgr = np.ascontiguousarray(face_rgb[:, :, ::-1])
+            cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
+            #if not face_bgr.empty():
+                #cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
+            #else:
+                #print("The face image is empty. Skipping image write.")
             Data_Photos.append(face_rgb)
 
 

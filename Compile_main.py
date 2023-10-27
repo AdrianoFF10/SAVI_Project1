@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 
     #---------------------------------
     # Inititalization
-    #---------------------------------
+    #---------------------------------  
 
 # Read Database of saved images and creating names and encodings list
 
@@ -18,16 +18,19 @@ saved_face_names = []
 saved_face_encodings = []
 Data_Photos = []
 Data_Len = 0
-
-if len(os.listdir('Database')) != 0:
-    for photo in os.listdir(path):
-        face_image = face_recognition.load_image_file(path + f'/{photo}')
-        face_encoding = face_recognition.face_encodings(face_image)[0]
-        name, extention = photo.split('.')
-        saved_face_names.append(name)
-        saved_face_encodings.append(face_encoding)
-        Data_Photos.append(face_image)
-
+try:
+    if len(os.listdir('Database')) != 0:
+        
+        for photo in os.listdir(path):
+            face_image = face_recognition.load_image_file(path + f'/{photo}')
+            face_encoding = face_recognition.face_encodings(face_image)[0]
+            name, extention = photo.split('.')
+            saved_face_names.append(name)
+            saved_face_encodings.append(face_encoding)
+            Data_Photos.append(face_image)
+except Exception as e:
+    print(f"Error loading database: {e}")
+    
 # Initialize some variables
 
 face_locations = []
@@ -35,7 +38,7 @@ face_encodings = []
 detection_counter = 0
 tracker_counter = 0
 trackers = []
-iou_threshold = 0.8
+iou_threshold = 0.5 
 names = []
 frame_counter = 0
 process_this_frame = True

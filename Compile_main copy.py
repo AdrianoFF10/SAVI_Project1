@@ -66,35 +66,35 @@ while True:
     # -------------------------------------
     # Detect people usign Face Recognition
     # -------------------------------------
+    if process_this_frame:
 
+        # Resize frame of video to 1/2 size for faster face recognition processing
+        small_frame = cv.resize(frame, (0, 0), fx=0.5, fy=0.5)   
 
-    # Resize frame of video to 1/2 size for faster face recognition processing
-    small_frame = cv.resize(frame, (0, 0), fx=0.5, fy=0.5)   
-
-    # Convert form bgr to rgb for the face recognition library
-    image_rgb_small = cv.cvtColor(small_frame, cv.COLOR_BGR2RGB)
+        # Convert form bgr to rgb for the face recognition library
+        image_rgb_small = cv.cvtColor(small_frame, cv.COLOR_BGR2RGB)
+        
+        # face_recognition tool usage to find a face 
+        face_locations = face_recognition.face_locations(image_rgb_small)
+        face_encodings = face_recognition.face_encodings(image_rgb_small, face_locations)
     
-    # face_recognition tool usage to find a face 
-    face_locations = face_recognition.face_locations(image_rgb_small)
-    face_encodings = face_recognition.face_encodings(image_rgb_small, face_locations)
+        # Creates a Detection class and connects it with a face
+        
+        detections = []
+        face_names = []
 
-    # Creates a Detection class and connects it with a face
+        for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+            w = right-left
+            h = bottom-top
+            x1 = left
+            y1 = top
+            detection = Detection(x1, y1, w, h, image_rgb_small, id=detection_counter, stamp=stamp, face_encoding=face_encoding, saved_encodings = saved_face_encodings, saved_names = saved_face_names, Data_Photos = Data_Photos)
+            detection_counter += 1
+            detection.draw(image_gui)
+            detections.append(detection)
+
+    process_this_frame = not process_this_frame
     
-    detections = []
-    face_names = []
-
-    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-        w = right-left
-        h = bottom-top
-        x1 = left
-        y1 = top
-        detection = Detection(x1, y1, w, h, image_rgb_small, id=detection_counter, stamp=stamp, face_encoding=face_encoding, saved_encodings = saved_face_encodings, saved_names = saved_face_names, Data_Photos = Data_Photos)
-        detection_counter += 1
-        detection.draw(image_gui)
-        detections.append(detection)
-
-
-
     # Detection to tracker evaluation and association
     for detection in detections: 
         for tracker in trackers: 

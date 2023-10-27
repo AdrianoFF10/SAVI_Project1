@@ -1,7 +1,3 @@
-# Sistemas Avançados de Visão Industrial (SAVI 23-24)
-# Grupo 1 - Adriano Figueredo e Bernardo Peixoto, DEM, UA
-
-
 import copy
 import face_recognition
 import cv2
@@ -66,18 +62,14 @@ class FaceRecognitionApp:
                         if matches[best_match_index]:
                             name = self.system.known_face_names[best_match_index]
                             if name not in self.system.hellos:
-                                self.system.engine.setProperty('rate', 100) 
-                                self.system.engine.setProperty('voice', 'portugal') 
-                                self.system.engine.say("Olá " + name)
+                                self.system.engine.say("Hello " + name)
                                 self.system.engine.runAndWait()
                                 self.system.hellos.append(name)
                     face_names.append(name)
 
                     if name.lower() == "unknown":
                         name = input("What is your name? ")
-                        self.system.engine.setProperty('rate', 100) 
-                        self.system.engine.setProperty('voice', 'portugal') 
-                        self.system.engine.say("Olá " + name)
+                        self.system.engine.say("Hello " + name)
                         self.system.engine.runAndWait()
                         self.system.hellos.append(name)
                         cv2.imwrite("Database/" + name.lower() + ".jpg", small_frame[face_locations[idx][0] - 30:face_locations[idx][2] + 30, face_locations[idx][3] - 30:face_locations[idx][1] + 30])
@@ -137,6 +129,7 @@ class FaceRecognitionSystemApp:
     def __init__(self):
         self.system = FaceRecognitionSystem()
         self.app = FaceRecognitionApp(self.system)
+
     def run(self):
         self.app.start()
 

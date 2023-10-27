@@ -70,6 +70,7 @@ def Create_Interface(image):
     image = ImageTk.PhotoImage(image)
     image_label = tk.Label(root, image=image)
     image_label.pack()
+    
     label = tk.Label(root, text="Insert your name:")
     label.pack()
     entry = tk.Entry(root)
@@ -93,19 +94,6 @@ class Detection():
         self.detection_id = id
         self.stamp = stamp
         self.name = name
-
-      
-        root = tk.Tk()
-        root.geometry('350x100')
-        root.title("Person name")
-        label = tk.Label(root, text = "Insert your name:")
-        label.pack()
-        entry = tk.Entry(root)
-        entry.pack()
-        button = tk.Button(root, text="Save and Close", command=save_input)
-        button.pack()
-        root.mainloop()
-    
 
     def draw(self, image, color, draw_position='bottom', text=None):
         start_point = (self.left, self.top)

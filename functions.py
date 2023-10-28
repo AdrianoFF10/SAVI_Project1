@@ -84,7 +84,7 @@ class Detection(BoundingBox):
         # encoding of the know face face encodings
 
             else:
-                person = 'Unknown'
+               # person = 'Unknown'
                 person = input('Who are you?')
                 self.person = str(person)
                 saved_names.append(person)
@@ -99,7 +99,7 @@ class Detection(BoundingBox):
 
         # Write the new person into the database
         else:
-            person = 'Unknown'
+           # person = 'Unknown'
             person = input('Who are you?')
             self.person = str(person)
             saved_names.append(person)

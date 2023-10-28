@@ -1,0 +1,36 @@
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.image import Image
+from kivy.uix.button import Button
+
+class NameAndImageApp(App):
+    def build(self):
+
+        layout = BoxLayout(orientation='vertical', padding = 120)
+        label = Label(text = "What is your name:")
+        self.name_input = TextInput(hint_text = "Nome", height = 30)
+        submit_button = Button(text = "Enviar", on_press = self.show_name_and_image)
+        self.name_label = Label(text = "")
+        self.avatar_image = Image(source='j.jpg', size_hint=(1, None), height=200)
+        
+        layout.add_widget(label)
+        layout.add_widget(self.name_input)
+        layout.add_widget(submit_button)
+        layout.add_widget(self.name_label)
+        layout.add_widget(self.avatar_image)
+        
+        return layout
+
+    def show_name_and_image(self, instance):
+        name = self.name_input.text
+        self.name_result = name
+        self.stop()
+
+
+app = NameAndImageApp()
+app.run()
+name = app.name_result
+print("Nome digitado:", name)
+

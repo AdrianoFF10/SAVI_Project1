@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 from copy import deepcopy
-from functions import Detection, Tracker
+from functions_copy import Detection, Tracker
 import face_recognition
 import os
 from matplotlib import pyplot as plt
@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 
     #---------------------------------
     # Inititalization
-    #---------------------------------  
+    #-------------------------------)--  
 
 # Read Database of saved images and creating names and encodings list
 

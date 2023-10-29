@@ -42,8 +42,11 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
 ## Requisitos
 
 - Python 3.6 ou superior
-- Bibliotecas listadas em: `requirements.txt`
-
+- Bibliotecas:`opencv-python`
+              `face-recognition`
+              `matplotlib`
+              `pyttsx3`
+              `kivy`
 ## Utilização
 
 - Clone o repositório:

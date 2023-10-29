@@ -2,7 +2,6 @@
 from copy import deepcopy
 import cv2 as cv
 import numpy as np
-from colorama import Fore, Style, Back
 import face_recognition
 import math
 import pyttsx3

@@ -47,10 +47,7 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
               `matplotlib`
               `pyttsx3`
               `kivy`
-<<<<<<< HEAD
-=======
-                         
->>>>>>> 7feb72a (update)
+              
 ## Utilização
 
 - Clone o repositório:

@@ -46,8 +46,8 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
               `face-recognition`
               `matplotlib`
               `pyttsx3`
-              `kivy`
-              
+              `tkinter`
+
 ## Utilização
 
 - Clone o repositório:

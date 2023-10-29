@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 from copy import deepcopy
-from functions_copy import Detection, Tracker
+from functions_v2 import Detection, Tracker
 import face_recognition
 import os
 from matplotlib import pyplot as plt
@@ -13,26 +13,16 @@ from matplotlib import pyplot as plt
 
 # Read Database of saved images and creating names and encodings list
 
+print('Welcome to this program!\n')
+option = input("If you want to start with an empty Database press '1'\n If you want to start with the existing database press 2.\n Option: ")
+option = str(option)
 path = "Database"
+
+# Initialize some variables
 saved_face_names = []
 saved_face_encodings = []
 Data_Photos = []
 Data_Len = 0
-try:
-    if len(os.listdir('Database')) != 0:
-        
-        for photo in os.listdir(path):
-            face_image = face_recognition.load_image_file(path + f'/{photo}')
-            face_encoding = face_recognition.face_encodings(face_image)[0]
-            name, extention = photo.split('.')
-            saved_face_names.append(name)
-            saved_face_encodings.append(face_encoding)
-            Data_Photos.append(face_image)
-except Exception as e:
-    print(f"Error loading database: {e}")
-    
-# Initialize some variables
-
 face_locations = []
 face_encodings = []
 detection_counter = 0
@@ -42,6 +32,57 @@ iou_threshold = 0.5
 names = []
 frame_counter = 0
 process_this_frame = True
+
+
+if option == '1':
+    if len(os.listdir('Database')) != 0:
+         
+        if os.path.exists(path):
+            # Listar todos os ficheiros na pasta
+            ficheiros = os.listdir(path)
+        
+        # Percorrer a lista de ficheiros e eliminar cada um
+            for ficheiro in ficheiros:
+                caminho_completo = os.path.join(path, ficheiro)
+                # Verificar se o caminho completo é um ficheiro (não é uma pasta)
+                if os.path.isfile(caminho_completo):
+                    os.remove(caminho_completo)
+        
+    print('Starting the program with empty Database ...')
+	
+else:
+	try:
+		if len(os.listdir('Database')) != 0:
+			
+			for photo in os.listdir(path):
+				face_image = face_recognition.load_image_file(path + f'/{photo}')
+				face_encoding = face_recognition.face_encodings(face_image)[0]
+				name, extention = photo.split('.')
+				saved_face_names.append(name)
+				saved_face_encodings.append(face_encoding)
+				Data_Photos.append(face_image)
+	except Exception as e:
+		print(f"Error loading database: {e}")
+    
+	print('Starting the program ...')
+
+    	
+	
+
+# try:
+#     if len(os.listdir('Database')) != 0:
+        
+#         for photo in os.listdir(path):
+#             face_image = face_recognition.load_image_file(path + f'/{photo}')
+#             face_encoding = face_recognition.face_encodings(face_image)[0]
+#             name, extention = photo.split('.')
+#             saved_face_names.append(name)
+#             saved_face_encodings.append(face_encoding)
+#             Data_Photos.append(face_image)
+# except Exception as e:
+#     print(f"Error loading database: {e}")
+    
+
 
 
     #---------------------------------
@@ -66,63 +107,64 @@ while True:
     # -------------------------------------
     # Detect people usign Face Recognition
     # -------------------------------------
+    if process_this_frame:
+            
+
+        # Resize frame of video to 1/2 size for faster face recognition processing
+        small_frame = cv.resize(frame, (0, 0), fx=0.5, fy=0.5)   
+
+        # Convert form bgr to rgb for the face recognition library
+        image_rgb_small = cv.cvtColor(small_frame, cv.COLOR_BGR2RGB)
+        
+        # face_recognition tool usage to find a face 
+        face_locations = face_recognition.face_locations(image_rgb_small)
+        face_encodings = face_recognition.face_encodings(image_rgb_small, face_locations)
+
+        # Creates a Detection class and connects it with a face
+        
+        detections = []
+        face_names = []
+
+        for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+            w = right-left
+            h = bottom-top
+            x1 = left
+            y1 = top
+            detection = Detection(x1, y1, w, h, image_rgb_small, id=detection_counter, stamp=stamp, face_encoding=face_encoding, saved_encodings = saved_face_encodings, saved_names = saved_face_names, Data_Photos = Data_Photos)
+            detection_counter += 1
+            detection.draw(image_gui)
+            detections.append(detection)
 
 
-    # Resize frame of video to 1/2 size for faster face recognition processing
-    small_frame = cv.resize(frame, (0, 0), fx=0.5, fy=0.5)   
 
-    # Convert form bgr to rgb for the face recognition library
-    image_rgb_small = cv.cvtColor(small_frame, cv.COLOR_BGR2RGB)
-    
-    # face_recognition tool usage to find a face 
-    face_locations = face_recognition.face_locations(image_rgb_small)
-    face_encodings = face_recognition.face_encodings(image_rgb_small, face_locations)
+        # Detection to tracker evaluation and association
+        for detection in detections: 
+            for tracker in trackers: 
+                if tracker.active:
+                    tracker_bbox = tracker.detections[-1]
+                    iou = detection.computeIOU(tracker_bbox)
 
-    # Creates a Detection class and connects it with a face
-    
-    detections = []
-    face_names = []
+                    if iou > iou_threshold:  
+                        tracker.addDetection(detection, image_rgb_small)
 
-    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-        w = right-left
-        h = bottom-top
-        x1 = left
-        y1 = top
-        detection = Detection(x1, y1, w, h, image_rgb_small, id=detection_counter, stamp=stamp, face_encoding=face_encoding, saved_encodings = saved_face_encodings, saved_names = saved_face_names, Data_Photos = Data_Photos)
-        detection_counter += 1
-        detection.draw(image_gui)
-        detections.append(detection)
+        # Track using template matching
+        for tracker in trackers:
+            last_detection_id = tracker.detections[-1].id
+            detection_ids = [d.id for d in detections]
+            if not last_detection_id in detection_ids:
+                tracker.track(image_rgb_small)
 
-
-
-    # Detection to tracker evaluation and association
-    for detection in detections: 
+        # Deactivate Tracker if it doesn't detect for two seconds
         for tracker in trackers: 
-            if tracker.active:
-                tracker_bbox = tracker.detections[-1]
-                iou = detection.computeIOU(tracker_bbox)
+            tracker.updateTime(stamp)
 
-                if iou > iou_threshold:  
-                    tracker.addDetection(detection, image_rgb_small)
-
-    # Track using template matching
-    for tracker in trackers:
-        last_detection_id = tracker.detections[-1].id
-        detection_ids = [d.id for d in detections]
-        if not last_detection_id in detection_ids:
-            tracker.track(image_rgb_small)
-
-    # Deactivate Tracker if it doesn't detect for two seconds
-    for tracker in trackers: 
-        tracker.updateTime(stamp)
-
-    # Create a Tracker class for each detection
-    for detection in detections:
-        if not detection.assigned_to_tracker:
-            tracker = Tracker(detection, id=tracker_counter, image=image_rgb_small, person = detection.person)
-            tracker_counter += 1
-            trackers.append(tracker)
-
+        # Create a Tracker class for each detection
+        for detection in detections:
+            if not detection.assigned_to_tracker:
+                tracker = Tracker(detection, id=tracker_counter, image=image_rgb_small, person = detection.person)
+                tracker_counter += 1
+                trackers.append(tracker)
+    process_this_frame = not process_this_frame
     # ------------------------------------------
     # Draw stuff
     # ------------------------------------------

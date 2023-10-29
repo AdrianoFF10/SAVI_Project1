@@ -32,7 +32,7 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
 
 3. **Visualização em Tempo Real da Base de Dados:** É possível visualizar a base de dados em tempo real sobre pessoas conhecidas.
 
-4. **Identificação de Pessoas Desconhecidas:** Quando uma pessoa desconhecida é detetada, o sistema permite ao usuário fornecer informações sobre essa pessoa nomeadamente o nome.
+4. **Identificação de Pessoas Desconhecidas:** Quando uma pessoa desconhecida é detetada, o sistema permite ao usuário fornecer informações sobre essa pessoa nomeadamente o nome. Para isso surge um pop-up com a sua imagem, permitindo à mesma identificar-se.
 
 5. **Cumprimentos Personalizados:** O sistema cumprimenta as pessoas conhecidas com mensagens personalizadas, como "Olá <nome da pessoa>".
 
@@ -47,6 +47,10 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
               `matplotlib`
               `pyttsx3`
               `kivy`
+<<<<<<< HEAD
+=======
+                         
+>>>>>>> 7feb72a (update)
 ## Utilização
 
 - Clone o repositório:

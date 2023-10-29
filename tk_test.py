@@ -47,7 +47,7 @@ root = tk.Tk()
 root.title("Input Saver")
 
 # Carregar a imagem com o Pillow e convertê-la para um formato adequado
-image = Image.open('Database/hh.jpg')
+image = Image.open('Database_prov/1.jpg')
 image = ImageTk.PhotoImage(image)
 
 image_label = tk.Label(root, image=image)

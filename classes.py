@@ -1,12 +1,9 @@
 
-from copy import deepcopy
 import cv2 as cv
 import numpy as np
 import face_recognition
 import math
 import pyttsx3
-
-import os
 import tkinter as tk
 from tkinter import simpledialog
 from tkinter import PhotoImage
@@ -87,7 +84,8 @@ class Detection(BoundingBox):
         # encoding of the know face face encodings
 
             else:
-                face_rgb = image_full[self.y1 // 2 : (self.y1//2 + self.w //2) , self.x1 //2 : (self.x1//2  + self.h//2)  ]
+                face_rgb = image_full[self.y1 // 2 : (self.y1//2 + self.w //2) ,
+                                       self.x1 //2 : (self.x1//2  + self.h//2)]
                 face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
                 cv.imwrite('Database_prov/1.jpg', face_bgr)
 
@@ -218,7 +216,7 @@ class Tracker():
     # Adds a new detection to the detection list
     def addDetection(self, detection, image):
 
-        self.tracker.init(image, (detection.x1//2, detection.y1//2, detection.w//2, detection.h//2))  # alteração aqui
+        self.tracker.init(image, (detection.x1//2, detection.y1//2, detection.w//2, detection.h//2))
         self.detections.append(detection)
         detection.assigned_to_tracker = True
         self.template = detection.image

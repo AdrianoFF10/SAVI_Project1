@@ -1,14 +1,13 @@
 # Sistema Inteligente de Reconhecimento de Facial
 
-
 # Index
 
   * [Introdução](#Introdução)
   * [Funcionalidades ](#Funcionalidades)
-  * [Funcionamento](#funcionamento)
+  * [Funcionamento](#Funcionamento)
   * [Requisitos](#Requisitos)
   * [Utilização](#Utilização)
-  * [Demonstração](#demonstração)
+  * [Demonstração](#Demonstração)
   * [Autores](#Autores)
 
 <div align="center">
@@ -22,7 +21,6 @@ Este projeto é um sistema inteligente que utiliza uma câmara associada ao comp
 <div align="center">
   <img src="./imagens/run_main.png" alt="Programa em funcionamento">
 </div>
-
 
 
 ## Funcionalidades 
@@ -62,8 +60,7 @@ pip install opencv-python
 ```
 
 * `face-recognition`
-Construído com base no OpenCv
-
+Construída com base no OpenCv é especializada no reconhcimento facial
 
 ```
 pip install dlib
@@ -76,22 +73,18 @@ pip install face-recognition
 ```
 
 * `matplotlib`
-
-
-
+Utilizada na criação de gráficos e visualização de dados.
 ```
 pip install matplotlib
 
 ```
 * `pyttsx3`
-
+Biblioteca que permite a síntese de frase a partir de texto(text-to-speech)
 
 ```
 pip install pyttsx3
 
 ```
-
-
 ## Utilização
 
 - Clone o repositório:
@@ -107,11 +100,9 @@ Certifique-se de criar uma base de dados de imagens de pessoas conhecidas na pas
 
 ## Demonstração
 
-[![Youtube Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/OAntO71JFXc)
-
+[![Youtube Demo](https://youtu.be/j-b9b61dCF4)](https://youtu.be/j-b9b61dCF4)
 
 ## Autores
 
 - [@AdrianoFF10](https://github.com/AdrianoFF10) - adrianofigueiredo7@ua.pt  104192
 - [@bpeixoto02](https://github.com/bpeixoto02) - bernardo.peixoto@ua.pt 103050
-

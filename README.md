@@ -7,6 +7,7 @@
   * [Funcionalidades ](#Funcionalidades)
   * [Requisitos](#Requisitos)
   * [Utilização](#Utilização)
+  * [Demonstração](#demonstração)
   * [Autores](#Autores)
 
 <div align="center">
@@ -42,11 +43,21 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
 ## Requisitos
 
 - Python 3.6 ou superior
-- Bibliotecas:`opencv-python`
-              `face-recognition`
-              `matplotlib`
-              `pyttsx3`
-              `tkinter`
+- Bibliotecas:
+* `opencv-python`
+
+
+
+* `face-recognition`
+
+
+* `matplotlib`
+
+
+* `pyttsx3`
+
+
+* `tkinter`
 
 ## Utilização
 
@@ -60,6 +71,10 @@ git clone https://github.com/AdrianoFF10/SAVI_Project1
 python3 main.py
 ```
 Certifique-se de criar uma base de dados de imagens de pessoas conhecidas na pasta "Database" antes de executar o sistema.
+
+## Demonstração
+
+[![Youtube Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/OAntO71JFXc)
 
 
 ## Autores

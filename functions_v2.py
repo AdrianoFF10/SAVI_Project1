@@ -12,7 +12,6 @@ from tkinter import simpledialog
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 
-
 #Calculates the percentage of matching of the face and the bbox
 
 def face_match_percent(face_distance):
@@ -22,6 +21,7 @@ def face_match_percent(face_distance):
 
     if face_distance > threshold:
         return linear_val * 100
+    
     else:
         value = (linear_val + ((1.0 - linear_val) * math.pow((linear_val - 0.5) * 2, 0.2)))
         return value * 100
@@ -42,7 +42,6 @@ class BoundingBox:
 
     # Compares the areas between 2 bounding boxes
     def computeIOU(self, bbox2):
-    
         x1_intr = min(self.x1, bbox2.x1)             
         y1_intr = min(self.y1, bbox2.y1)             
         x2_intr = max(self.x2, bbox2.x2)
@@ -60,7 +59,6 @@ class BoundingBox:
     def extractSmallImage(self, image_full):
         return image_full[self.y1:self.y1+self.h, self.x1:self.x1+self.w]
 
-
 # Classifies the bbox as a detection to be then tracked
 class Detection(BoundingBox):
 
@@ -69,9 +67,7 @@ class Detection(BoundingBox):
         self.id = id
         self.stamp = stamp
         self.image =self.extractSmallImage(image_full)
-        #cv.imshow(self.image)
         self.assigned_to_tracker = False
-
         self.person = 'Unknown'
 
         if len(saved_encodings) != 0:
@@ -83,6 +79,7 @@ class Detection(BoundingBox):
             # If it finds a face in frame associate a known name to the detection
             if found_face[match_id]:
                 confidence = face_match_percent(face_distances[match_id])
+
                 if confidence > 80:
                     self.person = saved_names[match_id]
 
@@ -90,17 +87,16 @@ class Detection(BoundingBox):
         # encoding of the know face face encodings
 
             else:
-                
                 face_rgb = image_full[self.y1 // 2 : (self.y1//2 + self.w //2) , self.x1 //2 : (self.x1//2  + self.h//2)  ]
                 face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
                 cv.imwrite('Database_prov/1.jpg', face_bgr)
+
                 def save_input():
                     global user_input
                     user_input = entry.get()
                     root.destroy()
-               #user_input = ""
+
                 root=tk.Tk()
-                # Create a Tkinter window to display the face image
                 root.title("Face Image")
                 face_image = Image.open('Database_prov/1.jpg')
                 face_image = ImageTk.PhotoImage(face_image)
@@ -118,15 +114,11 @@ class Detection(BoundingBox):
 
                 root.mainloop()
 
-                
-                #os.remove('Database_prov/1.jpg')
                 self.person = str(user_input)
-                
                 saved_names.append(self.person)
                 saved_encodings.append(face_encoding)
                 cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
                 Data_Photos.append(face_rgb)
-
 
         # Write the new person into the database
         else:
@@ -156,24 +148,18 @@ class Detection(BoundingBox):
             button.pack()
 
             root.mainloop()
-
-            #os.remove('Database_prov/1.jpg')
             self.person = str(user_input)
             saved_names.append(self.person)
             saved_encodings.append(face_encoding)
             cv.imwrite('Database/' + self.person + '.jpg', face_bgr)
             Data_Photos.append(face_rgb)
 
-
-    def draw(self, image_gui, color=(255,0,0)):
-
-        
+    def draw(self, image_gui, color=(255,0,0)):    
         cv.putText(image_gui, 'd' , (self.x1, self.y1-5), cv.FONT_HERSHEY_SIMPLEX, 
-                        1, color, 2, cv.LINE_AA)
+                    1, color, 2, cv.LINE_AA)
         
     def getLowerMiddlePoint(self):
         return (self.x1 + int((self.x1 - self.x1 + self.w)/2) , int(self.y1 + self.h))
-
 
 # Classifies the trackers using the detections using a CSRT tracker embedder in opencv
 class Tracker():
@@ -186,7 +172,6 @@ class Tracker():
         self.tracker = cv.TrackerCSRT_create()
         self.time_since_last_detection = None
         self.person = person
-
         self.addDetection(detection, image)
 
     # Says hello to the person associated with a new tracker
@@ -207,7 +192,6 @@ class Tracker():
 
     # Draws on the video a bbox, the person's name and the time since the last detection
     def draw(self, image_gui, color=(255,0,255)):
-
         bbox = self.bboxes[-1] # get last bounding box
 
         for detection_a, detection_b in zip(self.detections[0:-1], self.detections[1:]):
@@ -229,7 +213,6 @@ class Tracker():
     def addDetection(self, detection, image):
 
         self.tracker.init(image, (detection.x1//2, detection.y1//2, detection.w//2, detection.h//2))  # alteração aqui
-
         self.detections.append(detection)
         detection.assigned_to_tracker = True
         self.template = detection.image
@@ -238,10 +221,7 @@ class Tracker():
 
     # Updates the tracker and attaches the bounding box to the list
     def track(self, image):
-
         ret, bbox = self.tracker.update(image)
         x1,y1,w,h = bbox
-
-
         bbox = BoundingBox(x1, y1, w, h)
         self.bboxes.append(bbox)

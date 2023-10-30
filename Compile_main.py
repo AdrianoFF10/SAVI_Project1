@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# Sistemas Avançados de Visão Industrial (SAVI 23-24)
+# Grupo 1 - Adriano Figueredo e Bernardo Peixoto, DEM, UA
+
 import cv2 as cv
 import numpy as np
 from copy import deepcopy
@@ -6,10 +10,9 @@ import face_recognition
 import os
 from matplotlib import pyplot as plt
 
-
-    #---------------------------------
-    # Inititalization
-    #-------------------------------)--  
+#----------------------------------
+#--------Inititalization-----------
+#----------------------------------  
 
 # Read Database of saved images and creating names and encodings list
 
@@ -33,15 +36,14 @@ names = []
 frame_counter = 0
 process_this_frame = True
 
-
 if option == '1':
     if len(os.listdir('Database')) != 0:
          
         if os.path.exists(path):
-            # Listar todos os ficheiros na pasta
+            # List all files in folder
             ficheiros = os.listdir(path)
         
-        # Percorrer a lista de ficheiros e eliminar cada um
+            # Percorrer a lista de ficheiros e eliminar cada um
             for ficheiro in ficheiros:
                 caminho_completo = os.path.join(path, ficheiro)
                 # Verificar se o caminho completo é um ficheiro (não é uma pasta)
@@ -61,33 +63,15 @@ else:
 				saved_face_names.append(name)
 				saved_face_encodings.append(face_encoding)
 				Data_Photos.append(face_image)
+                    
 	except Exception as e:
 		print(f"Error loading database: {e}")
     
 	print('Starting the program ...')
 
-    	
-	
-
-# try:
-#     if len(os.listdir('Database')) != 0:
-        
-#         for photo in os.listdir(path):
-#             face_image = face_recognition.load_image_file(path + f'/{photo}')
-#             face_encoding = face_recognition.face_encodings(face_image)[0]
-#             name, extention = photo.split('.')
-#             saved_face_names.append(name)
-#             saved_face_encodings.append(face_encoding)
-#             Data_Photos.append(face_image)
-# except Exception as e:
-#     print(f"Error loading database: {e}")
-    
-
-
-
-    #---------------------------------
-    # Execution
-    #---------------------------------
+#---------------------------------
+#-----------Execution-------------
+#---------------------------------
     
 cap = cv.VideoCapture(0)
 
@@ -104,12 +88,11 @@ while True:
     image_gui = deepcopy(frame) # good practice to have a gui image for drawing
     stamp = float(cap.get(cv.CAP_PROP_POS_MSEC))/1000
 
-    # -------------------------------------
-    # Detect people usign Face Recognition
-    # -------------------------------------
-    if process_this_frame:
-            
+# --------------------------------------
+# -Detect people usign Face Recognition-
+# --------------------------------------
 
+    if process_this_frame:
         # Resize frame of video to 1/2 size for faster face recognition processing
         small_frame = cv.resize(frame, (0, 0), fx=0.5, fy=0.5)   
 
@@ -121,7 +104,6 @@ while True:
         face_encodings = face_recognition.face_encodings(image_rgb_small, face_locations)
 
         # Creates a Detection class and connects it with a face
-        
         detections = []
         face_names = []
 
@@ -134,8 +116,6 @@ while True:
             detection_counter += 1
             detection.draw(image_gui)
             detections.append(detection)
-
-
 
         # Detection to tracker evaluation and association
         for detection in detections: 
@@ -151,6 +131,7 @@ while True:
         for tracker in trackers:
             last_detection_id = tracker.detections[-1].id
             detection_ids = [d.id for d in detections]
+            
             if not last_detection_id in detection_ids:
                 tracker.track(image_rgb_small)
 
@@ -164,9 +145,11 @@ while True:
                 tracker = Tracker(detection, id=tracker_counter, image=image_rgb_small, person = detection.person)
                 tracker_counter += 1
                 trackers.append(tracker)
+
     process_this_frame = not process_this_frame
+
     # ------------------------------------------
-    # Draw stuff
+    # -------------Draw stuff-------------------
     # ------------------------------------------
 
     # Draw trackers
@@ -176,22 +159,11 @@ while True:
 
 # Show Database if was someone added
     if len(Data_Photos) != 0:
-        #print('Há foto')
         if Data_Len < len(Data_Photos):
             print('+1')
-            #cv2.namedWindow('Database', cv2.WINDOW_NORMAL)
             fig = plt.figure('DataBase', figsize=(10, 7), clear = True)
             rows = len(Data_Photos)
             columns = 1
-
-            # for n in range(int(len(Data_Photos))):
-            #      fig.add_subplot('Database',rows, columns, n + 1)
-            #      plt.imshow(Data_Photos[n])
-            #      plt.axis('off')
-            #      plt.title(known_face_names[n])
-            #      plt.tight_layout()   # Positions photos more aesthetics
-            # plt.draw()
-            # key = plt.waitforbuttonpress(0.01)
 
             for idx_photo, face_photo in enumerate(Data_Photos):
                 fig = plt.figure('DataBase', figsize=(10, 7), clear = False)
@@ -213,7 +185,7 @@ while True:
     frame_counter += 1
 
 # ------------------------------------------
-# Termination
+# ------------Termination-------------------
 # ------------------------------------------
 cap.release()
 cv.destroyAllWindows()

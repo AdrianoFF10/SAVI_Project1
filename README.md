@@ -5,6 +5,7 @@
 
   * [Introdução](#Introdução)
   * [Funcionalidades ](#Funcionalidades)
+  * [Funcionamento](#funcionamento)
   * [Requisitos](#Requisitos)
   * [Utilização](#Utilização)
   * [Demonstração](#demonstração)
@@ -16,8 +17,7 @@
 
 ## Introdução
 
-Este projeto é um sistema inteligente que utiliza uma câmara a bordo do computador para detetar e reconhecer rostos em tempo real. Oferece o reconhecimento facial de pessoas do grupo, com cumprimentos e o seguimento das deteções.
-Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de Visão Industrial.
+Este projeto é um sistema inteligente que utiliza uma câmara associada ao computador para detetar e reconhecer rostos em tempo real. Oferece o reconhecimento facial de pessoas do grupo, com cumprimentos e o seguimento das deteções. Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de Visão Industrial.
 
 <div align="center">
   <img src="./imagens/run_main.png" alt="Programa em funcionamento">
@@ -40,24 +40,57 @@ Este projeto foi desenvolvido no âmbito da discplina de Sistemas Avançados de 
 6. **Seguimento de Pessoas na Sala:** O sistema mantém o seguimento das pessoas na sala e mantém a identificação sobre as pessoas reconhecidas, mesmo que, em algum momento, não seja possível reconhecê-las.
 
 
+## Funcionamento
+
+A partir do momento que se inicia o programa, este tenta encontrar faces na imagem. A partir do momento que isto acontece, caso ele conheça a cara, cumprimenta essa pessoa e começa a seguir a face da mesma. Caso não conheça, surge uma janela pop-up com uma imagem da cara detetada, onde aparece também uma caixa de texto onde a pessoa deve inserir o seu nome. Seguidamente, tal como anteriormente, o programa cumprimenta a pessoa e começa a efetuar o seguimento dessa cara.
+
+Além disso, é desenhada uma linha que representa todos os locais onde a face foi detetada. 
+
+É possível visualizar em todos os momentos as caras adicionadas presentes na base de dados inicial, sendo que esta atualiza quando são adicionadas detetadas novas pessoas. 
+
+Por fim, no início do programa, surge um menu onde se pergunta se é pretendido iniciar o mesmo com a database existente ou se se pretende uma database vazia.
+
 ## Requisitos
 
 - Python 3.6 ou superior
 - Bibliotecas:
 * `opencv-python`
+É uma biblioteca Open Source utilizada para deteção de objetos e seguimento de movimentos através de imagens e vídeos.
 
-
+```
+pip install opencv-python
+```
 
 * `face-recognition`
+Construído com base no OpenCv
 
+
+```
+pip install dlib
+```
+Followed by
+
+```
+pip install face-recognition
+
+```
 
 * `matplotlib`
 
 
+
+```
+pip install matplotlib
+
+```
 * `pyttsx3`
 
 
-* `tkinter`
+```
+pip install pyttsx3
+
+```
+
 
 ## Utilização
 

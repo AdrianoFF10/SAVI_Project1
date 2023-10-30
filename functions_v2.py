@@ -155,7 +155,9 @@ class Detection(BoundingBox):
             Data_Photos.append(face_rgb)
 
     def draw(self, image_gui, color=(255,0,0)):    
-        cv.putText(image_gui, 'd' , (self.x1, self.y1-5), cv.FONT_HERSHEY_SIMPLEX, 
+        cv.rectangle(image_gui,(self.x1,self.y1),(self.x2,self.y2), color,3)
+        
+        cv.putText(image_gui, 'd', (self.x1, self.y1-5), cv.FONT_HERSHEY_SIMPLEX, 
                     1, color, 2, cv.LINE_AA)
         
     def getLowerMiddlePoint(self):
@@ -164,7 +166,7 @@ class Detection(BoundingBox):
 # Classifies the trackers using the detections using a CSRT tracker embedder in opencv
 class Tracker():
 
-    def __init__(self, detection, id, image, person):
+    def __init__(self, detection, id, image, person,color=(255,0,0)):
         self.id = id
         self.active = True
         self.bboxes = []
@@ -172,6 +174,8 @@ class Tracker():
         self.tracker = cv.TrackerCSRT_create()
         self.time_since_last_detection = None
         self.person = person
+        self.color = color
+
         self.addDetection(detection, image)
 
     # Says hello to the person associated with a new tracker
@@ -193,21 +197,23 @@ class Tracker():
     # Draws on the video a bbox, the person's name and the time since the last detection
     def draw(self, image_gui, color=(255,0,255)):
         bbox = self.bboxes[-1] # get last bounding box
+        self.detections[-1].draw(image_gui,self.color)
+        
 
         for detection_a, detection_b in zip(self.detections[0:-1], self.detections[1:]):
             start_point = detection_a.getLowerMiddlePoint()
             end_point = detection_b.getLowerMiddlePoint()
-            cv.line(image_gui, start_point, end_point, color, 1) 
+            cv.line(image_gui, start_point, end_point, self.color, 1) 
 
-        cv.rectangle(image_gui,(bbox.x1,bbox.y1),(bbox.x2, bbox.y2),color,3)
+        #cv.rectangle(image_gui,(bbox.x1,bbox.y1),(bbox.x2, bbox.y2),self.color,3)
 
         cv.putText(image_gui, str(self.person) + ' T' + str(self.id), 
                             (bbox.x1+25, bbox.y1-5), cv.FONT_HERSHEY_SIMPLEX, 
-                        1, color, 2, cv.LINE_AA)
+                        1, self.color, 2, cv.LINE_AA)
 
         cv.putText(image_gui, str(self.time_since_last_detection) + ' s', 
                             (bbox.x1, bbox.y1-30), cv.FONT_HERSHEY_SIMPLEX, 
-                        1, color, 2, cv.LINE_AA)
+                        1, self.color, 2, cv.LINE_AA)
 
     # Adds a new detection to the detection list
     def addDetection(self, detection, image):

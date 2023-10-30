@@ -9,6 +9,7 @@ from functions_v2 import Detection, Tracker
 import face_recognition
 import os
 from matplotlib import pyplot as plt
+from random import randint
 
 #----------------------------------
 #--------Inititalization-----------
@@ -114,7 +115,7 @@ while True:
             y1 = top
             detection = Detection(x1, y1, w, h, image_rgb_small, id=detection_counter, stamp=stamp, face_encoding=face_encoding, saved_encodings = saved_face_encodings, saved_names = saved_face_names, Data_Photos = Data_Photos)
             detection_counter += 1
-            detection.draw(image_gui)
+            #detection.draw(image_gui)
             detections.append(detection)
 
         # Detection to tracker evaluation and association
@@ -142,7 +143,8 @@ while True:
         # Create a Tracker class for each detection
         for detection in detections:
             if not detection.assigned_to_tracker:
-                tracker = Tracker(detection, id=tracker_counter, image=image_rgb_small, person = detection.person)
+                color = (randint(0, 255), randint(0, 255), randint(0, 255))
+                tracker = Tracker(detection, id=tracker_counter, image=image_rgb_small, person = detection.person, color=color)
                 tracker_counter += 1
                 trackers.append(tracker)
 

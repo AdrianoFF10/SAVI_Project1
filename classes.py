@@ -190,12 +190,12 @@ class Tracker():
     def updateTime(self, stamp):
         self.time_since_last_detection = round(stamp-self.getLastDetectionStamp(),1)
 
-        if self.time_since_last_detection > 2:        
+        if self.time_since_last_detection > 5:        
             self.active = False
 
     # Draws on the video a bbox, the person's name and the time since the last detection
     def draw(self, image_gui, color=(255,0,255)):
-        bbox = self.detections[-1] # get last bounding box
+        bbox = self.bboxes[-1] # get last bounding box
         self.detections[-1].draw(image_gui,self.color)
         
 
@@ -204,7 +204,7 @@ class Tracker():
             end_point = detection_b.getLowerMiddlePoint()
             cv.line(image_gui, start_point, end_point, self.color, 1) 
 
-        #cv.rectangle(image_gui,(bbox.x1,bbox.y1),(bbox.x2, bbox.y2),self.color,3)
+        cv.rectangle(image_gui,(bbox.x1,bbox.y1),(bbox.x2, bbox.y2),self.color,3)
 
         cv.putText(image_gui, str(self.person) + ' T' + str(self.id), 
                             (bbox.x1+25, bbox.y1-5), cv.FONT_HERSHEY_SIMPLEX, 

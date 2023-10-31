@@ -121,6 +121,10 @@ def main():
                 detection = Detection(left, top, w, h, image_rgb_small, id=detection_counter, stamp=stamp, face_encoding=face_encoding, saved_encodings = saved_face_encodings, saved_names = saved_face_names, Data_Photos = Data_Photos)
                 detection_counter += 1
                 detections.append(detection)
+            
+            # if frame_counter > 100:
+            #     detections = []
+            #     print('Já está apagar as deteçoes')
 
             # Detection to tracker evaluation and association
             for detection in detections: 
@@ -186,7 +190,7 @@ def main():
         cv.imshow('Face Cam Detector',image_gui) # show the image
         Data_Len = len(Data_Photos)
 
-        if cv.waitKey(50) == ord('q'):
+        if cv.waitKey(25) == ord('q'):
             break
 
     # ------------------------------------------

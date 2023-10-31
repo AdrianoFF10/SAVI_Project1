@@ -54,7 +54,7 @@ class BoundingBox:
 
     # Extracts just the face from the frame
     def extractSmallImage(self, image_full):
-        return image_full[self.y1:self.y1+self.h, self.x1:self.x1+self.w]
+        return image_full[self.y1:self.y1+self.w, self.x1:self.x1+self.h]
 
 # Classifies the bbox as a detection to be then tracked
 class Detection(BoundingBox):

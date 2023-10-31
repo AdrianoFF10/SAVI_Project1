@@ -100,7 +100,7 @@ Certifique-se de criar uma base de dados de imagens de pessoas conhecidas na pas
 
 ## Demonstração
 
-[![Youtube Demo](https://youtu.be/j-b9b61dCF4)](https://youtu.be/j-b9b61dCF4)
+[![Youtube Demo](https://youtu.be/aCJ7oW6knAk)](https://youtu.be/aCJ7oW6knAk)
 
 ## Autores
 

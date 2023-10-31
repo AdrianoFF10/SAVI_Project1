@@ -5,7 +5,7 @@
 import cv2 as cv
 import numpy as np
 from copy import deepcopy
-from classes_copy import Detection, Tracker
+from classes import Detection, Tracker
 import face_recognition
 import os
 from matplotlib import pyplot as plt

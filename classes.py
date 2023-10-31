@@ -120,7 +120,8 @@ class Detection(BoundingBox):
 
         # Write the new person into the database
         else:
-            face_rgb = image_full[self.y1 // 2 : (self.y1//2 + self.w //2) , self.x1 //2 : (self.x1//2  + self.h//2)]
+            face_rgb = image_full[self.y1 // 2 : (self.y1//2 + self.w //2) ,
+                                   self.x1 //2 : (self.x1//2  + self.h//2)]
             face_bgr = cv.cvtColor(face_rgb, cv.COLOR_RGB2BGR)
             cv.imwrite('Database_prov/1.jpg', face_bgr)
             def save_input():
@@ -194,7 +195,7 @@ class Tracker():
 
     # Draws on the video a bbox, the person's name and the time since the last detection
     def draw(self, image_gui, color=(255,0,255)):
-        bbox = self.bboxes[-1] # get last bounding box
+        bbox = self.detections[-1] # get last bounding box
         self.detections[-1].draw(image_gui,self.color)
         
 

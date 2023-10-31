@@ -194,7 +194,7 @@ class Tracker():
 
     # Draws on the video a bbox, the person's name and the time since the last detection
     def draw(self, image_gui, color=(255,0,255)):
-        bbox = self.bboxes[-1] # get last bounding box
+        bbox = self.detections[-1] # get last bounding box
         self.detections[-1].draw(image_gui,self.color)
         
 
